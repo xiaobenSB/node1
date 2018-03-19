@@ -25,3 +25,4 @@ if (cluster.isMaster) {    //cluster引入就执行的
   console.log(`工作进程 ${process.pid} 已启动`);
 } 
 
+//hello world
