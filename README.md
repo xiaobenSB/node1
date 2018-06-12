@@ -23,3 +23,5 @@ process.emit("SIGNAL_ONE","欢迎使用process.env.POR或8800端口");   //触�
 request模块可以请求地址并返回请求内容的数据对象，并不是单单只返回内容，所以跨域是不存在，而且可以把请求的数据对象包写在相同文件格式的可写流文件里，因为返回的是可读流（本地是http:127.0.0.1（这里可以localhost）:3000,不是单单localhost:3000，因为我们在浏览器上输入的是前面有http了不用我们输入了）
 
 http和ajax请求，http请求主要分http和https请求所以对应两个模块,而ajax有跨域的问题
+
+exports是继承module.exports的,最后node只会解析module.exports，所以在同个文件里声明module.exports会覆盖掉exports
