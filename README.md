@@ -4,6 +4,8 @@ node 使用常识
 
 /favicon.ico是http模块创建服务器后自动发送的请求，由于node不可以在一个请求里获取另一个不是在当前请求里的请求的数据，所以无法显示/favicon.ico的返回数据，因为是当前请求自动发送的请求,而当前的请求已经渲染数据，所以就算自动发送请求返回什么也渲染不到了
 
+在数据传输过程中，json是以文本，即字符串的形式传递的,所以你需要json.stringtfy(对象)再发送数据，不是直接发送json对象的，不然报错
+
 process等同于控制台
 
 var server=http.createServer(app).listen(process.env.POR||8800);  //process.env.POR  window下 process.env == set 后面可以任意名process.env.xxx == set xxx
