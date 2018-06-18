@@ -6,6 +6,8 @@ node 使用常识
 
 在数据传输过程中，json是以文本，即字符串的形式传递的,所以你需要json.stringtfy(对象)再发送数据，不是直接发送json对象的，不然报错
 
+node模块之间的引入知识：当一个node进程引入同一个模块（2次或以上）时,第一次引入时node缓存了，当第二次引入时先找缓存里看有没有，有就直接拿缓存里的，所以你第一次引入可以重新赋值，然后第二次就可以用赋的值，这个用来回调时你有不想在回调写太多代码然后用模块来解决非常方便
+
 process等同于控制台
 
 var server=http.createServer(app).listen(process.env.POR||8800);  //process.env.POR  window下 process.env == set 后面可以任意名process.env.xxx == set xxx
