@@ -10,6 +10,8 @@ node模块之间的引入知识：当一个node进程引入同一个对象模块
 
 node的express框架，他对象里的use(这里可能是当服务器打开时就会执行这里的方面，并传了req,res对象参数你就可以扩展他里面req,res内容)，如body-parese就是这样扩展的,为什么可以多个use而不会覆盖呢，可以use函数的参数被push到一个外面数组里，然后就可以不担心覆盖了
 
+webpack babel编译是假如引入后缀名匹配就编译匹配的整个文件，然后引入的的是编译后的
+
 process等同于控制台
 
 var server=http.createServer(app).listen(process.env.POR||8800);  //process.env.POR  window下 process.env == set 后面可以任意名process.env.xxx == set xxx
