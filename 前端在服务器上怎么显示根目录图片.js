@@ -1,3 +1,6 @@
+前端在服务器上时的根目录对应的是ip,因为页面通过ip渲染出来的
+后台里的根目录对应服务器启动的位置
+
 var express = require('express');
 var app = express();
 var fs = require('fs');
