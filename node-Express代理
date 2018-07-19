@@ -9,8 +9,9 @@ app.use('/', function(req, res) {
 var url = 'https://www.baidu.com/' + req.url;
 
 req.pipe(request(url)).pipe(res);
-//处理过程，先拿到http流（里面包括了信息头，数据），然后让req.pipe去存储，然后再pipe给res处理渲染。req和res的pipe可能不是像fs的pipe那样分可写可读的
-
+/*处理过程，先拿到http流（里面包括了信息头，数据），然后让req.pipe去存储，然后再pipe给res处理渲染。req和res的pipe可能不是像fs的pipe那样分可写可读的,
+req.pipe方法可能执行了res.write这个方法
+所以我们平时操作req和res就是往http对象里面添加数据，request就是把别人添加好的再放到我们自己的里面去显示*/
 
 request(url).pipe(fs.createWriteStream('5.txt'));
 });
