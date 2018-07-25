@@ -36,3 +36,5 @@ http和ajax请求，http请求主要分http和https请求所以对应两个模�
 
 exports是继承module.exports的,最后node只会解析module.exports，所以在同个文件里声明module.exports会覆盖掉exports
 
+node爬虫也就是抓取网页某个内容，是抓取不了js里生成dom,因为他抓取过程为：读取整个网页内容后然后再类似正则匹配相应信息，但他并没有能力读取完并执行里面js后在匹配（没有解析js功能）
+
