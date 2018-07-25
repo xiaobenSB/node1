@@ -35,3 +35,4 @@ images模块可以把一张图片重新设置宽高和清晰度，也可以把�
 http和ajax请求，http请求主要分http和https请求所以对应两个模块,而ajax有跨域的问题
 
 exports是继承module.exports的,最后node只会解析module.exports，所以在同个文件里声明module.exports会覆盖掉exports
+
