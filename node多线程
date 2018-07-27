@@ -10,8 +10,9 @@ if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node
     cluster.fork();  //复制当前进程（也就是用fork开启一个跟当前数据一样的新进程）
   }
   var i = 8;
-  cluster.on('exit', function(worker, code, signal) {  //监听关闭
+  cluster.on('exit', function(worker, code, signal) {  //监听fork进程关闭（因为node进程是等他里面的数据执行完就退出，而fork进程是依赖node进程的，node退出就没fork进程了）
 		if(!--i){
+		       console.log(i)
 			console.timeEnd('8 cluster');
 		}
   });
