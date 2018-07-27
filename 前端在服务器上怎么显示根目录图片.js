@@ -2,6 +2,8 @@
 后台里的根目录对应服务器启动的位置
 express里的res和req可以那样用说明他们是属于共用对象来的
 
+Http Content-Type对应以什么数据类型解析数据（数据类型对应大全 - http://tool.oschina.net/commons/）
+
 var express = require('express');
 var app = express();
 var fs = require('fs');
