@@ -7,15 +7,15 @@ console.time('8 cluster');
 if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node xx.js启动的不是fork启动）
   // Fork workers.
   for (var i = 0; i < numCPUs; i++) {
-    cluster.fork();  //复制当前进程并开启（也就是用fork开启一个跟当前数据一样的新进程）
+    cluster.fork();  //复制当前进程并开启（也就是用fork开启一个跟当前数据一样的新进程，有多少个fork就放到同一个环境里依次执行）
   }
-  var i = 8;  //fork能用node进程的全局变量，但node进程不会用fork的，只在node进程里的找（也就是node只会用自己执行生成的数据，fork忽视掉）
+  var i = 8;  //fork能用node进程的全局变量，但node进程不会用fork的，只在node进程里的找（也就是node只会用自己执行生成的数据，fork生成的不找）
   
   cluster.on('exit', function(worker, code, signal) {  //这个监听退出按钮也只对fork进程退出有效,全部的fork退出都会触发到这个（因为node进程是等他里面的数据执行完就退出，而fork进程是依赖node进程的，node退出就没fork进程了）
  
 		if(!--i){  
 		
-		       console.log(i) //而fork进程是1-2-3-...，一个接一个开启执行，所以这里的i会一次一次减少
+		       console.log(i) //而fork进程是1-2-3-...，一个接一个开启执行，所以这里的i会一次一次减少(会获取到前面fork产生的数据)
 			console.timeEnd('8 cluster');
 		}
   });
@@ -25,3 +25,4 @@ if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node
 	process.exit(0); //当执行到这里process等同与fork
 }
 
+//全部的fork退出都会触发到这个的原理解析： 或许是上面cluster.on里的 function('exit',fun){ this.xx = fun     } ,然后process.exit里的function(0){ 触发了this.xx()  }
