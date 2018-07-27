@@ -11,7 +11,7 @@ if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node
   }
   var i = 8;  //fork能用node进程的全局变量，但node进程不会用fork的，只在node进程里的找（也就是node只会用自己执行生成的数据，fork忽视掉）
   
-  cluster.on('exit', function(worker, code, signal) {  //这个监听退出按钮也只对fork进程退出有效（因为node进程是等他里面的数据执行完就退出，而fork进程是依赖node进程的，node退出就没fork进程了）
+  cluster.on('exit', function(worker, code, signal) {  //这个监听退出按钮也只对fork进程退出有效,全部的fork退出都会触发到这个（因为node进程是等他里面的数据执行完就退出，而fork进程是依赖node进程的，node退出就没fork进程了）
  
 		if(!--i){  
 		
@@ -19,8 +19,9 @@ if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node
 			console.timeEnd('8 cluster');
 		}
   });
+  //这里process等同与node
 } else {
 	console.log(fibo (40));
-	process.exit(0); //关闭进程
+	process.exit(0); //当执行到这里process等同与fork
 }
 
