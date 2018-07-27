@@ -26,3 +26,4 @@ if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node
 }
 
 //全部的fork退出都会触发到这个的原理解析： 或许是上面cluster.on里的 function('exit',fun){ this.xx = fun     } ,然后process.exit里的function(0){ 触发了this.xx()  }
+//关于i为什么全局没有影响原理解析：获取是cluster先把node的全局变量（var 定义的）存到了自己的cluster funtion里然后里面有fork function,所以这样fork执行查找的是cluster里的，
