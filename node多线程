@@ -1,0 +1,22 @@
+var cluster = require('cluster');
+var numCPUs = 8;
+function fibo (n) {
+  return n > 1 ? fibo(n - 1) + fibo(n - 2) : 1;
+}
+console.time('8 cluster');
+if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node xx.js启动的不是fork启动）
+  // Fork workers.
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();  //复制当前进程（也就是用fork开启一个跟当前数据一样的新进程）
+  }
+  var i = 8;
+  cluster.on('exit', function(worker, code, signal) {  //监听关闭
+		if(!--i){
+			console.timeEnd('8 cluster');
+		}
+  });
+} else {
+	console.log(fibo (40));
+	process.exit(0); //关闭进程
+}
+
