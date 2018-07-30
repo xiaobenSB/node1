@@ -1,0 +1,21 @@
+var http = require('http');
+var express = require('express');
+var fs=require("fs");
+
+var app = express();
+app.get('/download', function (req, res, next) {
+
+　
+  var path="D:/KDR/2.png";
+  var f = fs.createReadStream(path);
+  
+  res.writeHead(200, {
+    'Content-Type': 'application/force-download',   //通知浏览器要使用下载解析
+    'Content-Disposition': 'attachment; filename=2.png'  //下载完的文件名为filename后面的，所以可以自定义后缀名确保数据可正确浏览
+  });
+  
+  f.pipe(res);  //往浏览器要解析的内容里输入文件流 
+ 
+});
+
+http.createServer(app).listen(3000);
