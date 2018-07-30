@@ -1,3 +1,5 @@
+//res为该服务器进程最终将以什么样的方式在浏览器里显示，可读流肯定是得通过可写流里的对象键write才能写入可写流里的
+
 var http = require('http');
 var express = require('express');
 var fs=require("fs");
