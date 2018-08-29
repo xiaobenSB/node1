@@ -22,7 +22,7 @@ http.createServer(function(req, res) {
     busboy.on('finish', function() {
       console.log('Done parsing form!');
       res.writeHead(303, { Connection: 'close', Location: '/' });  //post发送/请求
-      res.end('<h1>www</h1>'); //上面的Location直接跳转了然后某个值为false了，没有处理这里返回数据
+      res.end('<h1>www</h1>'); //上面的Location直接跳转了然后某个值为false了，没有处理这里返回数据,但end是必须，要断开这个请求
 	  console.log(1);
     });
     req.pipe(busboy);
