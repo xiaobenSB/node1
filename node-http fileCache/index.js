@@ -102,7 +102,7 @@ var a  = new fileDateCache();
 
 res.setHeader( "Pragma", "no-cache" );
 res.setHeader( "Cache-Control", "no-cache" );
-res.setHeader( "Cache-Control", "no-store" );  //这个彻底没有缓存,也就是res设置的ETag等等，下次请求不会带上
+res.setHeader( "Cache-Control", "no-store" );  //这个彻底没有缓存,也就是res设置的ETag等等，下次请求不会带上（res携带的都会清理掉，所以返回的数据都没了，再304就找不到上次请求返回得内容了）
 
 
 HTML的HTTP协议头信息中控制着页面在几个地方的缓存信息，包括浏览器端，中间缓存服务器端
