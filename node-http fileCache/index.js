@@ -39,7 +39,7 @@ var that = this;
                 let etag = md5.digest('hex');   //md5把文件编译成hex,好处是：字符很少所以大小也变小了，可以设置在响应头里下次请求携带
                 if (ifNoneMatch === etag) {
 				
-                    res.writeHead(304);  //304是不会跳转到其它页面，如：第一次请求ip返回的如果是304就返回空白页，如果是在跟它一样ip的浏览器窗口时，返回304就不会跳转，就显示该ip上次同样ip请求的数据
+                    res.writeHead(304);  //304是返回上次跟它一样请求返回的数据，如：第一次请求ip返回的如果是304就返回空白页，如果是在跟它一样ip的浏览器窗口时，返回304就不会跳转，就显示该ip上次同样ip请求的数据
                     res.end('');
 					
 					global.gc();
@@ -102,6 +102,7 @@ var a  = new fileDateCache();
 
 res.setHeader( "Pragma", "no-cache" );
 res.setHeader( "Cache-Control", "no-cache" );
+res.setHeader( "Cache-Control", "max-age=3" ); //这个跟下面no-store同用处，但是请求返回后3秒才会清除缓存
 res.setHeader( "Cache-Control", "no-store" );  //这个彻底没有缓存,也就是res设置的ETag等等，下次请求不会带上（res携带的都会清理掉，所以返回的数据都没了，再304就找不到上次请求返回得内容了）
 
 
@@ -109,7 +110,7 @@ HTML的HTTP协议头信息中控制着页面在几个地方的缓存信息，包
 (如：squid等)，Web服务器端。本文讨论头信息 中带缓存控制信息的HTML页面(JSP/Servlet生成好出来的也是HTML页面)在中间缓存服务器中的缓存情况.HTTP协议中关于缓存的信息头关键字包括Cache-Control(HTTP1.1)，Pragma(HTTP1.0)，last-Modified，Expires等。
 
 
-no-cache，浏览器和缓存服务器都不应该缓存页面信息；
+no-cache，浏览器和缓存服务器都不应该缓存页面信息，也就是还有缓存；
 
 no-store，请求和响应的信息都不应该被存储在对方的磁盘系统中;
 
