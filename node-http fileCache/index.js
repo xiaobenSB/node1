@@ -102,7 +102,7 @@ var a  = new fileDateCache();
 
 res.setHeader( "Pragma", "no-cache" );
 res.setHeader( "Cache-Control", "no-cache" );
-res.setHeader( "Cache-Control", "max-age=3" ); //这个跟下面no-store同用处，但是请求返回后3秒才会清除缓存，这个设置好像没用
+res.setHeader( "Cache-Control", "max-age=3" ); //这个跟下面no-store同用处，但是请求返回后3秒才会清除缓存，这个设置好像没用，还是有缓存
 res.setHeader( "Cache-Control", "no-store" );  //这个彻底没有缓存,也就是res设置的ETag等等，下次请求不会带上（res携带的都会清理掉，所以返回的数据都没了，再304就找不到上次请求返回得内容了）
 
 
