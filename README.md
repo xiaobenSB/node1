@@ -1,6 +1,6 @@
 node 使用常识
 
-async function 报错不会退出，只是该方法不会继续执行
+async function 报错不会退出所有的js执行，只是该方法不会继续执行
 
 res.end 就是把设置的res信息头和内容返回给浏览器处理，并结束此次连接。
 
