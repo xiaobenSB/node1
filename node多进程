@@ -13,9 +13,9 @@ if (cluster.isMaster) {  //判断是不是forK出来的进程（也就是用node
   
   cluster.on('exit', function(worker, code, signal) {  //这个监听退出按钮也只对fork进程退出有效,全部的fork退出都会触发到这个（因为node进程是等他里面的数据执行完就退出，而fork进程是依赖node进程的，node退出就没fork进程了）
  
-		if(!--i){  
+		if(!--i){  //这里的--i会执行才！进行判断，所以当关闭一个进程时就会触发到这里，所以i对应开了几个进程然后减到0
 		
-		       console.log(i) //而fork进程是1-2-3-...，一个接一个开启执行，所以这里的i会一次一次减少(会获取到前面fork产生的数据)
+		       console.log(i) //而fork进程是1-2-3-...，一个接一个开启执行，所以这里的i会一次一次减少
 			console.timeEnd('8 cluster');
 		}
   });
