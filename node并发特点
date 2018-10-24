@@ -1,0 +1,13 @@
+d(req,res){
+	  for(var j =0;j<9000;j++){ j+=2; };
+	  if( i <10 ){
+		  
+		  setTimeout(function(){  console.log('wobuxiangdanggefeiren!kewoweishenmezongshitibuqijing!')  },1000/60);
+	  }
+	  i++;
+	  res.end(''+i);
+  }
+  
+  
+  以上面代码来讲，来一百并发控制台还是只打印10条console.log的数据（100并发等于上面100个方法），说明js必须一步一步执行的（如i++;for循环）并发也是要一步一步执行的，一个方法接一个方法的执行（没有同时），只有那些异步（延时
+  ，数据库连接是延时的话）并发就不会等待，会处理下一步，然后延时那些谁快就执行谁先
