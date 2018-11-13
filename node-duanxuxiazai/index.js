@@ -121,7 +121,7 @@ function httpListener(request, response) {
   var end = rangeRequest.End;
   
   // If the range can't be fulfilled. 
-  if (start >= stat.size || end >= stat.size) {
+  if (start >= stat.size || end >= stat.size) {   //stat.size为文件有多大
     // Indicate the acceptable range.
     responseHeaders['Content-Range'] = 'bytes */' + stat.size; // File size.
   
