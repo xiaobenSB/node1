@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+	$("button").click(function(){
+		$.ajax({url:"/2.html",
+		  type: "GET",
+                 headers: {
+                     'Range': 'bytes=5000-',
+                 },
+		  success:function(result){
+		   console.log(result+1)
+			$("#div1").html(result);
+		},
+		error:function(xhr){
+		  console.log(xhr)
+		}
+		});
+	});
+});
+</script>
+</head>
+<body>
+
+<div id="div1"><h2>使用 jQuery AJAX 修改文本内容</h2></div>
+<button>获取其他内容</button>
+
+</body>
+</html>
