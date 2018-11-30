@@ -22,7 +22,7 @@ post和get请求里添加的数据方式不同,数据类型可以发送只要是
 xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 xmlhttp.send(JSON.stringify(a)||'www'||'111'||'+=%'); 如果你要发送中文，可以把中文转化成英文字母 如 encodeURI(中文);<br/>
 <br/>
-res.end 就是把设置的res信息头和内容返回给浏览器处理，并结束此次连接。
+res.end 就是把设置的res信息头和内容返回给浏览器处理，并结束此次连接。<br/>
 
 浏览器就是一个可视化工具，里面有很多解析功能来对应数据可视，如设置Content-Type为video/mp4 时，那么浏览器就会用MP4视频解析功能来解析你返回的数据，然后以他里面mp4的显示方式来可视
 
