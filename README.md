@@ -20,7 +20,7 @@ async function 报错不会退出所有的js执行，只是该方法不会继续
 <h3>node http</h3>
 post和get请求里添加的数据方式不同,数据类型可以发送只要是数字或英文字母或字符的字符串,但方式get只能是?xx=xx&xx=xx，而post，如xmlhttp.open("POST","ajax_test.asp",true);
 xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-xmlhttp.send(JSON.stringify(a)||'www'||'111'||'+=%'); 如果你要发送中文，可以把中文转化成英文字母 如 encodeURI(中文);
+xmlhttp.send(JSON.stringify(a)||'www'||'111'||'+=%'); 如果你要发送中文，可以把中文转化成英文字母 如 encodeURI(中文);<br/>
 
 res.end 就是把设置的res信息头和内容返回给浏览器处理，并结束此次连接。
 
