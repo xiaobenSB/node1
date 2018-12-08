@@ -1,4 +1,32 @@
 node 使用常识
+
+<h3>字符编码与buffer</h3>
+Node.js 目前支持的字符编码包括：
+
+Latin1是ISO-8859-1的别名，有些环境下写作Latin-1。ISO-8859-1编码是单字节编码，向下兼容ASCII，其编码范围是0x00-0xFF，0x00-0x7F之间完全和ASCII一致，0x80-0x9F之间是控制字符，0xA0-0xFF之间是文字符号。
+
+ANSI是一种字符代码，为使计算机支持更多语言，通常使用 0x00~0x7f 范围的1 个字节来表示 1 个英文字符。超出此范围的使用0x80~0xFFFF来编码，即扩展的ASCII编码。（即扩展代表ANSI有些ASCII没有，所以不能用node里的ascii）
+
+
+ascii - 仅支持 7 位 ASCII 数据。如果设置去掉高位的话，这种编码是非常快的。
+
+utf8 - 多字节编码的 Unicode 字符。许多网页和其他文档格式都使用 UTF-8 。
+
+utf16le - 2 或 4 个字节，小字节序编码的 Unicode 字符。支持代理对（U+10000 至 U+10FFFF）。
+
+ucs2 - utf16le 的别名。
+
+base64 - Base64 编码。
+
+latin1 - 一种把 Buffer 编码成一字节编码的字符串的方式。
+
+binary - latin1 的别名。
+
+hex - 将每个字节编码为两个十六进制字符。
+
+node会把读取或写入数据先转化成buffer，如fs.readFile,fs.writeFile，res.end等等(fs.writeFile可以设置是转成包含 哪种 字节编码的buffer),（读取数据）node转成buffer的包含哪种字符编码是根据该文件的源字符编码设置的，如图片或视频是ANSI，那么就对应latin1或binary，文本保存为utf8就为utf8。（写入数据）如果数据是buffer，那么node自己会该buffer处理的，如果是字符窜，那么默认会转成utf8的buffer。res.end没有设置，fs.writeFile可以设置。简单来说就是图片是一种ANSI的编码，如果转成utf8数据就不能识别，同样中文utf8能识别，而ANSI不能识别
+
+
 <h3>fs</h3>
 在Node读取文件fs方法里，readFile返回buffer,然后你使用返回的Buffer.toSting(),默认是把源文件编码（也就是他自己会先把buffer编译回源编码再）编译为utf8，而类似于图片视频之类的编码，源编码可不是utf8，所以就不能用该（.toSting()）方法,而writeFile方法会自动把buffer数据编译成源文件编码再写入文件里，同样createReadStream以流方式显示读取的文件，里面的.on('data')可以接收以流方式读取的文件数据，但默认也是返回utf8编码的，同样破坏了源文件编码，使用管pipe方法就可以以源文件编码导入可写流里
 
