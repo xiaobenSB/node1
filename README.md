@@ -24,7 +24,8 @@ binary - latin1 的别名。
 
 hex - 将每个字节编码为两个十六进制字符。
 
-node会把读取或写入数据先转化成buffer，如fs.readFile,fs.writeFile，res.end等等(fs.writeFile可以设置是转成包含 哪种 字节编码的buffer),（读取数据）node转成buffer的包含哪种字符编码是根据该文件的源字符编码设置的，如图片或视频是ANSI，那么就对应latin1或binary，文本保存为utf8就为utf8。（写入数据）<h4>如果数据是buffer，那么node自己会该buffer处理的，如果是字符窜，那么默认会转成utf8的buffer。res.end没有设置，fs.writeFile可以设置</h4>。简单来说就是图片是一种ANSI的编码，如果转成utf8数据就不能识别，同样中文utf8能识别，而ANSI不能识别（也就是utf8识别不了ANSI某些编码，ANSI识别不了uft8默些编码）
+node会把读取或写入数据先转化成buffer，如fs.readFile,fs.writeFile，res.end等等(fs.writeFile可以设置是转成包含 哪种 字节编码的buffer),（读取数据）node转成buffer的包含哪种字符编码是根据该文件的源字符编码设置的，如图片或视频是ANSI，那么就对应latin1或binary，文本保存为utf8就为utf8。（写入数据）<h4>如果数据是buffer，那么node自己会该buffer处理的，如果是字符窜，那么默认会转成utf8的buffer。res.end没有设置，fs.writeFile可以设置</h4>。简单来说就是图片是一种ANSI的编码，如果转成utf8数据就不能识别，同样中文utf8能识别，而ANSI不能识别（也就是utf8识别不了ANSI某些编码，ANSI识别不了uft8默些编码）<br/>
+base64编码只对是图片（二进制）的buffer生效，也就是你读取图片，图片为二进制buffer,你就可以toString('base64')
 
 
 <h3>fs</h3>
