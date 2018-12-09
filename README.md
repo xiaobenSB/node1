@@ -18,7 +18,7 @@ ucs2 - utf16le 的别名。
 
 base64 - Base64 编码。
 
-latin1 - 一种把 Buffer 编码成一字节编码的字符串的方式。
+latin1 - 一种把 Buffer 编码成一字节编码的字符串的方式。（低版本node不支持，低版本得改用binary）
 
 binary - latin1 的别名。
 
