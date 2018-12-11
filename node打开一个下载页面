@@ -41,7 +41,7 @@ app.get('/download', function (req, res, next) {
   fs.readFile(path,function(err,data){
   res.writeHead(200, {
     'Content-Type': 'application/force-download',   //通知浏览器要使用下载解析
-	'Content-Length': data.length,    //这里可以提升下载文件的大小
+	'Content-Length': data.length,    //这里可以提示下载文件的大小
     'Content-Disposition': 'attachment; filename=xiaoben.apk'  //下载完的文件名为filename后面的，所以可以自定义后缀名确保数据可正确浏览
   });
 	res.end(data)
