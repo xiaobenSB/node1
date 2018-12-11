@@ -24,7 +24,7 @@ binary - latin1 的别名。
 
 hex - 将每个字节编码为两个十六进制字符。
 
-node会把读取或写入数据先转化成buffer(它写入的方法最后可能会调用解Buffer编码方法，因为别人不认识buffer，就像res.end(如果真的返回buffer,浏览器不知能自己解析成字符串不)，fs.writeFile源码里是先转成buffer，无论是buffer还是字符串,可能里面最后调用哪个方法解吧)，如fs.readFile,fs.writeFile，res.end等等(fs.writeFile可以设置是转成包含 哪种 字节编码的buffer),（读取数据）node转成buffer的包含哪种字符编码是根据该文件的源字符编码设置的，如图片或视频是ANSI，那么就对应latin1或binary，文本保存为utf8就为utf8。（写入数据）<h4>如果数据是buffer，那么node自己会该buffer处理的，如果是字符窜，那么默认会转成utf8的buffer。res.end没有设置，fs.writeFile可以设置</h4>。简单来说就是图片是一种ANSI的编码，如果转成utf8数据就不能识别，同样中文utf8能识别，而ANSI不能识别（也就是utf8识别不了ANSI某些编码，ANSI识别不了uft8默些编码）<br/>
+node会把读取或写入数据先转化成buffer(它写入的方法最后可能会调用解Buffer编码方法，因为别人不认识buffer，就像res.end(如果真的返回buffer,浏览器不知能自己解析成字符串不)，fs.writeFile源码里是先转成buffer，无论是buffer还是字符串,可能里面最后调用哪个方法解吧)，如fs.readFile,fs.writeFile，res.end等等(fs.writeFile可以设置是转成包含 哪种 字节编码的buffer),（读取数据）node转成buffer的包含哪种字符编码是根据该文件的源字符编码设置的，如图片或视频是ANSI，那么就对应latin1或binary，文本保存为utf8就为utf8。（写入数据）<h4>如果数据是buffer，那么node自己会该buffer处理的，如果是字符窜，那么默认会转成utf8的buffer。res.end可以设置（res.end(data.toString('latin1'),'latin1')），fs.writeFile可以设置</h4>。简单来说就是图片是一种ANSI的编码，如果转成utf8数据就不能识别，同样中文utf8能识别，而ANSI不能识别（也就是utf8识别不了ANSI某些编码，ANSI识别不了uft8默些编码）<br/>总结：<h4>就是使用node res.end或res.writeFile时，如果传的参数是字符串他就会先编译成buffer然后才编译成字符窜进行写入，默认字符串编译成utf8的buffer,如果传的是buffer，那node自己会解析出他是什么类型的buffer来替换默认的utf8</h4>
 base64编码只对是图片（二进制）的buffer生效，也就是你读取图片，图片为二进制buffer,你就可以toString('base64')
 
 
