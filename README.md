@@ -73,7 +73,7 @@ node的express框架，他对象里的use(这里可能是当服务器打开时�
 webpack babel编译是假如引入后缀名匹配就编译匹配的整个文件，然后引入的的是编译后的，然后整个文件是存在当前这个进程里的，var a = require(xx)的话就是require把整个文件放到进程里处理编译然后从这里面取exports部分来给a用，整个文件就像function那样，里面的变量只给他里面的用，打包的话就会把进程里的东西全都给打包了
 
 <h3>（只限）node里console.log的技巧</h3>
-91红 92绿色 93黄 94蓝 95洋红 96青 97白（就设置前面\033[这里  后面的\033[39m不动）
+91红 92绿色 93黄 94蓝 95洋红 96青 97白（就设置前面\033[这里  后面的\033[39m不动）  <br/>
 console.log('\033[91m   server listening on *:3000\033[39m');
 
 
@@ -82,8 +82,8 @@ process等同于node进程
 
 var server=http.createServer(app).listen(process.env.POR||8800);  //process.env.POR  window下 process.env == set 后面可以任意名process.env.xxx == set xxx
 
-//监听当前控制台触发事件
-process.on('uncaughtException', function (err) {  //拦截控制台的报错信息并处理，防止退出 虽然不会退出但错误语句后面也不执行
+//监听当前进程触发事件
+process.on('uncaughtException', function (err) {  //拦截进程的报错信息并处理，防止退出 虽然不会退出但错误语句后面也不执行
 　　console.log('Caught exception: ' + err);  
 }); 
 
