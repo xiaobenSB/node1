@@ -83,7 +83,7 @@ process等同于node进程
 var server=http.createServer(app).listen(process.env.POR||8800);  //process.env.POR  window下 process.env == set 后面可以任意名process.env.xxx == set xxx
 
 //监听当前进程触发事件
-process.on('uncaughtException', function (err) {  //拦截进程的报错信息并处理，防止退出 虽然不会退出但错误语句后面也不执行
+process.on('uncaughtException', function (err) {  //拦截进程的报错信息并处理，可以设置重开一个进程防止退出
 　　console.log('Caught exception: ' + err);  
 }); 
 
