@@ -1,6 +1,8 @@
 node 使用常识
 
 <h3>字符编码与buffer</h3>
+uft8编码类型buffer是当前数据被buffer方法里设置的buffer之utf8转码进行转换
+tostring('uft8')是当前buffer数据被buffer方法里设置的buffer之utf8解码进行转换
 Node.js 目前支持的字符编码包括：
 
 Latin1是ISO-8859-1的别名，有些环境下写作Latin-1。ISO-8859-1编码是单字节编码，向下兼容ASCII，其编码范围是0x00-0xFF，0x00-0x7F之间完全和ASCII一致，0x80-0x9F之间是控制字符，0xA0-0xFF之间是文字符号。
