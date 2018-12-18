@@ -1,3 +1,4 @@
+<h3>全局Global（Gb）与局部local（Lc）</h3>
 node 使用常识
 
 <h3>字符编码与buffer</h3>
