@@ -19,7 +19,7 @@ utf16le - 2 或 4 个字节，小字节序编码的 Unicode 字符。支持代�
 
 ucs2 - utf16le 的别名。
 
-base64 - Base64 编码。（把图片的二进制编码为base64编码,可以被前端的background-image:url(base64)和img src解析成原本数据，减少服务器请求，Base64编码可用于在HTTP环境下传递较长的标识信息。data:image/jpg;base64,数据 这段说明了url和src发起http请求，可以被http请求解析并返回里面的数据（过程：http请求 - 解析地址然后发现是data:image/jpg,所以response设置contype-type并且发现了base64,就知道该数据编码是base64，从而解码写到response）<h4>从而体现这段等同一个服务器</h4>）
+base64 - Base64 编码。（把图片的二进制编码为base64编码,可以被前端的background-image:url(base64)和img src解析成原本数据，减少服务器请求，Base64编码可用于在HTTP环境下传递较长的标识信息。<h5>data:image/jpg;base64,数据 这段</h5>说明了url和src发起http请求，可以被http请求解析并返回里面的数据（过程：http请求 - 解析地址然后发现是data:image/jpg,所以response设置contype-type并且发现了base64,就知道该数据编码是base64，从而解码写到response）<h5>从而体现这段等同一个服务器</h5>）
 
 latin1 - 一种把 Buffer 编码成一字节编码的字符串的方式。（低版本node不支持，低版本得改用binary）
 
