@@ -1,0 +1,268 @@
+用的工具是vs2013  需要下载curl和opencv两个库
+
+
+#include "opencv/cv.hpp"  
+#include "opencv2/objdetect/objdetect.hpp"  
+#include "opencv2/highgui/highgui.hpp"  
+#include "opencv2/imgproc/imgproc.hpp"  
+
+#include <iostream>  
+#include <stdio.h>  
+
+#include <string>  
+#include "curl/curl.h"
+
+using namespace std;
+using namespace cv;
+
+/*
+@@@@
+                curl之http发送请求
+@@@@
+*/
+
+
+/*#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "wldap32.lib")
+#pragma comment(lib, "crypt32.lib")
+#pragma comment(lib, "advapi32.lib")
+#pragma comment(lib, "libcurl.lib")*/
+
+// reply of the requery
+size_t req_reply(void *ptr, size_t size, size_t nmemb, void *stream)
+{
+	cout << "----->reply" << endl;
+	string *str = (string*)stream;
+	cout << *str << endl;
+	(*str).append((char*)ptr, size*nmemb);
+	return size * nmemb;
+}
+
+// http GET
+CURLcode curl_get_req(const std::string &url, std::string &response)
+{
+	// init curl
+	CURL *curl = curl_easy_init();
+	// res code
+	CURLcode res;
+	if (curl)
+	{
+		// set params
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); // url
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false); // if want to use https
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false); // set peer and host verify false
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+		curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, req_reply);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&response);
+		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl, CURLOPT_HEADER, 1);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3); // set transport and time out time
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+		// start req
+		res = curl_easy_perform(curl);
+	}
+	// release curl
+	curl_easy_cleanup(curl);
+	return res;
+}
+
+// http POST
+CURLcode curl_post_req(const string &url, const string &postParams, string &response)
+{
+	// init curl
+	CURL *curl = curl_easy_init();
+	// res code
+	CURLcode res;
+	if (curl)
+	{
+		// set params
+		curl_easy_setopt(curl, CURLOPT_POST, 1); // post req
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str()); // url
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postParams.c_str()); // params
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false); // if want to use https
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false); // set peer and host verify false
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+		curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, req_reply);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&response);
+		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl, CURLOPT_HEADER, 1);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+		// start req
+		res = curl_easy_perform(curl);
+	}
+	// release curl
+	curl_easy_cleanup(curl);
+	return res;
+}
+
+
+/*
+@@@@
+            opencv人脸识别 + 人脸对比
+@@@@
+*/
+
+String cascadeName = "D:\\BaiduNetdiskDownload\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt.xml";
+
+IplImage* cutImage(IplImage* src, CvRect rect) {
+	cvSetImageROI(src, rect);
+	IplImage* dst = cvCreateImage(cvSize(rect.width, rect.height),
+		src->depth,
+		src->nChannels);
+
+	cvCopy(src, dst, 0);
+	cvResetImageROI(src);
+	return dst;
+}
+
+IplImage* detect(Mat& img, CascadeClassifier& cascade, double scale)
+{
+	int i = 0;
+	double t = 0;
+	vector<Rect> faces;
+	Mat gray, smallImg(cvRound(img.rows / scale), cvRound(img.cols / scale), CV_8UC1);
+
+	cvtColor(img, gray, CV_BGR2GRAY);
+	resize(gray, smallImg, smallImg.size(), 0, 0, INTER_LINEAR);
+	equalizeHist(smallImg, smallImg);
+
+	t = (double)cvGetTickCount();
+	cascade.detectMultiScale(smallImg, faces,
+		1.3, 2, CV_HAAR_SCALE_IMAGE,
+		Size(30, 30));
+	t = (double)cvGetTickCount() - t;
+	printf("detection time = %g ms\n", t / ((double)cvGetTickFrequency()*1000.));
+	for (vector<Rect>::const_iterator r = faces.begin(); r != faces.end(); r++, i++)
+	{
+		IplImage* temp = cutImage(&(IplImage(img)), cvRect(r->x, r->y, r->width, r->height));
+		return temp;
+	}
+
+	return NULL;
+}
+//画直方图用  
+int HistogramBins = 256;
+float HistogramRange1[2] = { 0, 255 };
+float *HistogramRange[1] = { &HistogramRange1[0] };
+int CompareHist(IplImage* image1, IplImage* image2)
+{
+	IplImage* srcImage;
+	IplImage* targetImage;
+	if (image1->nChannels != 1) {
+		srcImage = cvCreateImage(cvSize(image1->width, image1->height), image1->depth, 1);
+		cvCvtColor(image1, srcImage, CV_BGR2GRAY);
+	}
+	else {
+		srcImage = image1;
+	}
+
+	if (image2->nChannels != 1) {
+		targetImage = cvCreateImage(cvSize(image2->width, image2->height), srcImage->depth, 1);
+		cvCvtColor(image2, targetImage, CV_BGR2GRAY);
+	}
+	else {
+		targetImage = image2;
+	}
+
+	CvHistogram *Histogram1 = cvCreateHist(1, &HistogramBins, CV_HIST_ARRAY, HistogramRange);
+	CvHistogram *Histogram2 = cvCreateHist(1, &HistogramBins, CV_HIST_ARRAY, HistogramRange);
+
+	cvCalcHist(&srcImage, Histogram1);
+	cvCalcHist(&targetImage, Histogram2);
+
+	cvNormalizeHist(Histogram1, 1);
+	cvNormalizeHist(Histogram2, 1);
+
+	// CV_COMP_CHISQR,CV_COMP_BHATTACHARYYA这两种都可以用来做直方图的比较，值越小，说明图形越相似  
+	printf("CV_COMP_CHISQR : %.4f\n", cvCompareHist(Histogram1, Histogram2, CV_COMP_CHISQR));
+	printf("CV_COMP_BHATTACHARYYA : %.4f\n", cvCompareHist(Histogram1, Histogram2, CV_COMP_BHATTACHARYYA));
+
+
+	// CV_COMP_CORREL, CV_COMP_INTERSECT这两种直方图的比较，值越大，说明图形越相似  
+	printf("CV_COMP_CORREL : %.4f\n", cvCompareHist(Histogram1, Histogram2, CV_COMP_CORREL));//0-1
+	printf("CV_COMP_INTERSECT : %.4f\n", cvCompareHist(Histogram1, Histogram2, CV_COMP_INTERSECT));
+
+
+
+	//double 转 字符串
+	double aaa = cvCompareHist(Histogram1, Histogram2, CV_COMP_CORREL);
+	char str[256];
+	sprintf(str, "%lf", aaa);
+	string result = str;
+	// global init
+	curl_global_init(CURL_GLOBAL_ALL);
+
+	// test get requery
+	string getUrlStr = "http://127.0.0.1:443/opencv?shibiedu=" + result;
+	string getResponseStr;
+	auto res = curl_get_req(getUrlStr, getResponseStr);
+	if (res != CURLE_OK){
+		cerr << "curl_easy_perform() failed: " + string(curl_easy_strerror(res)) << endl;
+	}else{
+		cout << getResponseStr << endl;
+		char *savePath = "C:\\Users\\Administrator\\Desktop\\703b9b.jpg";
+		    if (remove(savePath) == 0)
+			     {
+			         cout << "删除成功" << endl;
+			    }
+		     else
+			    {
+			        cout << "删除失败" << endl;
+			     }
+	}
+	// global release
+	curl_global_cleanup();
+
+
+
+	cvReleaseHist(&Histogram1);
+	cvReleaseHist(&Histogram2);
+	if (image1->nChannels != 1) {
+		cvReleaseImage(&srcImage);
+	}
+	if (image2->nChannels != 1) {
+		cvReleaseImage(&targetImage);
+	}
+	return 0;
+}
+String srcImage = "C:\\Users\\Administrator\\Desktop\\70eb479bly1frloby8balj20tq0tq1kx.jpg";
+String targetImage = "C:\\Users\\Administrator\\Desktop\\D3AS7RQJ00AJ0003NOS.jpg";
+int main(int argc, char* argv[])
+{
+	CascadeClassifier cascade;
+	/*namedWindow("image1");
+	namedWindow("image2");*/
+	if (!cascade.load(cascadeName))
+	{
+		return -1;
+	}
+
+	Mat srcImg, targetImg;
+	IplImage* faceImage1;
+	IplImage* faceImage2;
+	srcImg = imread(srcImage);
+	targetImg = imread(targetImage);
+	faceImage1 = detect(srcImg, cascade, 1);
+	if (faceImage1 == NULL) {
+		return -1;
+	}
+	//    cvSaveImage("d:\\face.jpg", faceImage1, 0);  
+	faceImage2 = detect(targetImg, cascade, 1);
+	if (faceImage2 == NULL) {
+		return -1;
+	}
+	//    cvSaveImage("d:\\face1.jpg", faceImage2, 0);  
+	imshow("image1", Mat(faceImage1));
+	imshow("image2", Mat(faceImage2));
+
+	CompareHist(faceImage1, faceImage2);
+	cvWaitKey(0);
+	cvReleaseImage(&faceImage1);
+	cvReleaseImage(&faceImage2);
+	system("pause");
+
+	return 0;
+}
