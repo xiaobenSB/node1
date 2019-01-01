@@ -2,6 +2,9 @@
 node 使用常识
 
 <h3>字符编码与buffer</h3>
+encode（码，utf8编码格式）（等同于node的Buffer.from(码，utf8编码格式);）该码以utf8编码方式来编写
+decode（码，utf8编码格式）（等同于node的buf.toString(utf8编码方式)）该码解析为 utf8编码方式，然后再以utf8编码格式来编写
+
 uft8编码类型buffer是当前数据被buffer方法里设置的buffer之utf8转码进行转换
 tostring('uft8')是当前buffer数据被buffer方法里设置的buffer之utf8解码进行转换
 Node.js 目前支持的字符编码包括：
