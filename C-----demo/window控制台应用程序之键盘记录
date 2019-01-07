@@ -69,7 +69,8 @@ int main()
 {
 	HHOOK mouseHook = SetWindowsHookExA(WH_KEYBOARD_LL, KeyboardProc, GetModuleHandle(NULL), NULL);
 	MSG msg;
-	while (GetMessage(&msg, NULL, NULL, NULL))
+  //防止程序退出，并且监听控制台消息事件，没有消息时就等待，这时可以执行其他方法（SetWindowsHookExA），如果while(1)的话，那么该语句一直不释放，执行不了其他语句	
+	while (GetMessage(&msg, NULL, NULL, NULL))                
 	{
 	}
 	UnhookWindowsHookEx(mouseHook);
