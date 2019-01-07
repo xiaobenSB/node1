@@ -80,7 +80,8 @@ int main()
 	while (GetMessage(&msg, NULL, NULL, NULL))                
 	{
 	   /*
-	   这步没有执行到，所以直接GetMessage(&msg, NULL, NULL, NULL)就可行了，不用while。GetMessage里面可能是一直用该（该文本就代表主线程）主进程执行去（过段时间就去，等同js延时）获取消息，
+	   这步没有执行到，所以直接GetMessage(&msg, NULL, NULL, NULL)就可行了，不用while。GetMessage里面可能是一直用该（该文本就代表主线程）主线程执行去（过段时间就去，等同js延时，
+	   延时的时候去查找可执行代码，也就是SetWindowsHookExA，SetWindowsHookExA再去获取键盘消息，然后获取完该子线程又延时，然后又去执行可执行代码，也就是GetMessage）获取消息，
 	   而SetWindowsHookExA里面可能开了子线程来执行，子线程的不退出由于不能影响主线程的不退出，所以GetMessage防止主线程退出
 	   */
 	}
