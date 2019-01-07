@@ -63,6 +63,13 @@ LRESULT  CALLBACK  KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	}
 	return CallNextHookEx(glhHook, nCode, wParam, lParam);
 }
+/*
+
+GetMessage是从调用线程的消息队列里取得一个消息并将其放于指定的结构。此函数可取得与指定窗口联系的消息和由PostThreadMessage寄送的线程消息。
+此函数接收一定范围的消息值。GetMessage不接收属于其他线程或应用程序的消息。获取消息成功后，线程将从消息队列中删除该消息。
+函数会一直等待直到有消息到来才有返回值。
+
+*/
 
 
 int main()
@@ -72,6 +79,10 @@ int main()
   //防止程序退出，并且监听控制台消息事件，没有消息时就等待，这时可以执行其他方法（SetWindowsHookExA），如果while(1)的话，那么该语句一直不释放，执行不了其他语句	
 	while (GetMessage(&msg, NULL, NULL, NULL))                
 	{
+	   /*
+	   这步没有执行到，所以直接GetMessage(&msg, NULL, NULL, NULL)就可行了，不用while。GetMessage里面可能是一直用该（该文本就代表主线程）主进程执行去（过段时间就去，等同js延时）获取消息，
+	   而SetWindowsHookExA里面可能开了子线程来执行，子线程的不退出由于不能影响主线程的不退出，所以GetMessage防止主线程退出
+	   */
 	}
 	UnhookWindowsHookEx(mouseHook);
 	return 0;
