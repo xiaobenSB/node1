@@ -25,7 +25,10 @@ var that = this;
   fs.stat(filepath, (err, stat) => {
         if (err) {
             return that.sendError(req, res);
-        } else {
+        } else if(stat.size < 524288){     //文件大小 大于0.5M或以上的才压缩
+	        console.log(stat.size)
+		that.end(req,res,filepath);	
+	} else {
             let ifNoneMatch = req.headers['if-none-match'];
             let out = fs.createReadStream(filepath);
             let md5 = crypto.createHash('md5');
@@ -58,6 +61,14 @@ sendError(req, res) {
     res.end('Not Found');
 }
 
+end(req, res, filepath) {
+	
+	res.setHeader('Content-Type', mime.getType(filepath));
+	res.writeHead(200);  
+	var raw = fs.createReadStream(filepath);
+	raw.pipe(res);
+}
+	
 send(req, res, filepath, etag) {
     res.setHeader('Content-Type', mime.getType(filepath));
     res.setHeader('ETag', etag);
