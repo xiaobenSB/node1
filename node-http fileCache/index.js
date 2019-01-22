@@ -64,7 +64,7 @@ sendError(req, res) {
 end(req, res, filepath) {
 	
 	res.setHeader('Content-Type', mime.getType(filepath));
-	res.writeHead(200);  
+	res.writeHead(200);  //设置这个一定要在最后面，因为一旦设置这个属性，就不能用其他属性写http的Head头了，包括这个属性也不能，只能存在一个
 	var raw = fs.createReadStream(filepath);
 	raw.pipe(res);
 }
