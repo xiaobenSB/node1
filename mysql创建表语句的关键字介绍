@@ -1,0 +1,41 @@
+DROP TABLE IF EXISTS `eb_article`;
+CREATE TABLE `eb_article` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章管理ID',
+  `cid` varchar(255) DEFAULT '1' COMMENT '分类id',
+  `title` varchar(255) NOT NULL COMMENT '文章标题',
+  `author` varchar(255) DEFAULT NULL COMMENT '文章作者',
+  `image_input` varchar(255) NOT NULL COMMENT '文章图片',
+  `synopsis` varchar(255) DEFAULT NULL COMMENT '文章简介',
+  `share_title` varchar(255) DEFAULT NULL COMMENT '文章分享标题',
+  `share_synopsis` varchar(255) DEFAULT NULL COMMENT '文章分享简介',
+  `visit` varchar(255) DEFAULT NULL COMMENT '浏览次数',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `url` varchar(255) DEFAULT NULL COMMENT '原文链接',
+  `status` tinyint(1) unsigned NOT NULL COMMENT '状态',
+  `add_time` varchar(255) NOT NULL COMMENT '添加时间',
+  `hide` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
+  `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员id',
+  `mer_id` int(10) unsigned DEFAULT '0' COMMENT '商户id',
+  `is_hot` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否热门(小程序)',
+  `is_banner` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否轮播图(小程序)',
+  `image_inputs` text COMMENT '定位1图片',
+  `image_inputstwo` text COMMENT '定位2图片',
+  `image_inputstwo_title` text COMMENT '定位2图片加对应文章',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `is_banner` (`is_banner`) USING BTREE,
+  KEY `is_hot` (`is_hot`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='文章管理表';
+
+
+字段关键字的含义：
+
+    unsigned        -> 设置无符号（代表该字段对应值为正数（大于0）大小范围 0-255）
+    NOT NULL        -> 不为空
+    DEFAULT '1'     -> 该字段值默认为'1' 
+    COMMENT '我'    -> 该字段注释为我
+    AUTO_INCREMENT  -> 自动递增（每个表只能一个字段设置这个属性，所以一般设置在id字段）
+    PRIMARY KEY （'id'）  ->id字段为主键 
+
+    UNIQUE KEY `is_banner` (`is_banner`) USING BTREE,
+    KEY `is_hot` (`is_hot`) USING BTREE
+    //上面两段是设置索引的。名：code,栏目：code,索引类型：UNIQUE（如果不设置这个默认为Normal）,索引方法：USING BTREE
