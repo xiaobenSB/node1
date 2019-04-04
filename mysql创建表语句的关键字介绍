@@ -33,7 +33,7 @@ CREATE TABLE `eb_article` (
     NOT NULL        -> 不为空
     DEFAULT '1'     -> 该字段值默认为'1' 
     COMMENT '我'    -> 该字段注释为我
-    AUTO_INCREMENT  -> 自动递增（每个表只能一个字段设置这个属性，并且设置的字段必须还要为主键，所以一般设置在id字段）
+    AUTO_INCREMENT  -> 自动递增（每个表只能一个字段设置这个属性，并且设置的字段必须还要为主键，还有个好处，就是不用担心服务器崩掉，因为每新来一条数据就自动递增，所以一般设置在id字段）
     PRIMARY KEY （'id'）  ->id字段为主键 
 
     UNIQUE KEY `is_banner` (`is_banner`) USING BTREE,
