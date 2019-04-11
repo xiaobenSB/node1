@@ -1,0 +1,20 @@
+SELECT `id`,`store_name`,`cate_id`,image,sales,`ficti`,`price`,`stock`,(ficti+sales) AS `jia` 
+FROM `eb_store_product` 
+WHERE `is_del` = 0 AND `is_show` = 1 AND `mer_id` = 0 AND `is_new` = 1 
+ORDER BY `jia` ASC,`sort` DESC,`add_time` DESC 
+LIMIT 0,20
+
+
+
+查询 eb_store_product表
+
+找到包含`is_del` = 0 AND `is_show` = 1 AND `mer_id` = 0 AND `is_new` = 1 字段的一行行数据（一行代表数据，一行行代表一行行数据）
+
+注意这个一行行数据里的字段是完整的，只是字段得包含上面的
+
+然后把一行行数据按照（先找到jia,知道jia等于ficti+sales,然后在一行行数据上每行添加一个等使用完就抛弃的字段，也就是字段=jia值=ficti+sales）
+jia字段从上到下,sort从下到上,add_time从下到上排序(第一个也就是jia是最先排序的，如果有相同的jia才使用第二个，第二个还相同就用第三个)
+
+根据0,20只保留0至20行的数据
+
+最后把一行行数据只保留`id`,`store_name`,`cate_id`,image,sales,`ficti`,`price`,`stock`字段,其他字段抛弃了（包含）
