@@ -5,6 +5,7 @@ ORDER BY `jia` ASC,`sort` DESC,`add_time` DESC
 LIMIT 0,20
 
 
+（语句会先被数据库处理过在执行下面操作，处理到(ficti+sales) AS `jia`时生成一个新字段）
 
 查询 eb_store_product表
 
