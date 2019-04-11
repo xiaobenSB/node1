@@ -12,9 +12,13 @@ LIMIT 0,20
 
 注意这个一行行数据里的字段是完整的，只是字段得包含上面的
 
-然后把一行行数据按照（先找到jia,知道jia等于ficti+sales,然后在一行行数据上每行添加一个等使用完就抛弃的字段，也就是字段=jia值=ficti+sales）
+然后把一行行数据按照（先找到jia,知道jia等于ficti+sales,然后在一行行数据上每行添加一个新的字段，也就是字段=jia值=ficti+sales）
 jia字段从上到下,sort从下到上,add_time从下到上排序(第一个也就是jia是最先排序的，如果有相同的jia才使用第二个，第二个还相同就用第三个)
 
 根据0,20只保留0至20行的数据
 
-最后把一行行数据只保留`id`,`store_name`,`cate_id`,image,sales,`ficti`,`price`,`stock`字段,其他字段抛弃了（包含）
+最后把一行行数据只保留`id`,`store_name`,`cate_id`,image,sales,`ficti`,`price`,`stock`字段,抛弃了其他字段
+
+
+也就是说每个关键字（SELECT WHERE ORDER）后面的字符串都是有对应规则，如ORDER规则为：字段 排序方式，字段 排序方式（如果有其他符号就会报错，如：()）
+而SELECT后面的规则可以允许多种方式，如：字段，(ficti+sales) AS `jia` 代表字段相加生成新的字段
