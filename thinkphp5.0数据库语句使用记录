@@ -1,0 +1,18 @@
+ $list = StoreProductRelation::where('A.uid',$this->userInfo['uid'])
+        ->field('B.id pid,B.store_name,B.price,B.ot_price,B.sales,B.image,B.is_del,B.is_show')->alias('A')
+        ->where('A.type','collect')->where('A.category','product')
+        ->where("is_show=0 or is_del=1")
+        ->order('A.add_time DESC')->join('__STORE_PRODUCT__ B','A.product_id = B.id')
+        ->limit($first,$limit)->select();
+        
+        
+        上面那段sql语句含义为：查询 设置的数据库前缀+store_prroduct_relation表里的 uid = $this->userInfo['uid'] 设置该表的别名alias('A')为A,
+        
+        join('__STORE_PRODUCT__ B', 是设置当前表要关联的 前缀+store+product表，并设置该表的别名为B
+        
+        如果为 limit(10,25); 就代表从第10行开始获取25条数据
+        
+        where('B.price<A.price')  就代表要获取 B表的price字段 小于 A表的price字段 的数据
+        
+        
+        
