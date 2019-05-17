@@ -2,8 +2,8 @@
 node 使用常识
 
 <h3>服务器返回各种文件给浏览器前的content-type内容类型（也就是该文件类型或者该数据类型）输写大全</h3>
-链接: http://tool.oschina.net/commons/
-前端实现在线预览pdf、word、xls、ppt等文件  
+链接: http://tool.oschina.net/commons/   <br/>
+前端实现在线预览pdf、word、xls、ppt等文件  <br/>
 链接: https://juejin.im/post/5a7badf26fb9a063353198a1?utm_medium=hao.caibaojian.com&utm_source=hao.caibaojian.com
 
 
