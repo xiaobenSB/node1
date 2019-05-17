@@ -1,6 +1,12 @@
 <h3>全局Global（Gb）与局部local（Lc）</h3>
 node 使用常识
 
+<h3>服务器返回各种文件给浏览器前的content-type内容类型（也就是该文件类型或者该数据类型）输写大全</h3>
+链接: http://tool.oschina.net/commons/
+前端实现在线预览pdf、word、xls、ppt等文件  
+链接: https://juejin.im/post/5a7badf26fb9a063353198a1?utm_medium=hao.caibaojian.com&utm_source=hao.caibaojian.com
+
+
 <h3>字符编码与buffer</h3>
 不准确的：encode（码，utf8编码格式）（等同于node的Buffer.from(码，utf8编码格式);）该码以utf8编码方式来编写（如果用其他编码方式的码，utf8可能识别不了）<br />
 不准确的：decode（码，utf8编码格式）（等同于node的buf.toString(utf8编码方式)）该码解析（转换）为 utf8编码方式（ANSI可以转换为GB2312，记事本文件打开就是先把ANSI转换成GB2312再呈现给我们的，文件内容源编码是ANSI的），然后再以utf8编码格式来编写<br />
