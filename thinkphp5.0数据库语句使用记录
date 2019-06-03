@@ -18,6 +18,7 @@
 下面为一行数据里某个字段值加某个字段值后重新生成一个字段（数据库里的字段不会变的）来进行排序
 如：ficti+sales 生成 jia   然后  `jia` DESC 时，就是对比jia的值来进行排序
 也就是操作数据库是把数据给全取出来再进行排序（操作），上面是数据全取出来再每个数据都加上jia字段然后再进行操作
+然后返回的数据里有jia字段，因为他只是第一步需要数据库里的数据，之后都不需要了，剩下就是处理后再返回给需要使用的，况且他只是对数据库进行取，没有进行写
 
 SELECT `id`,`store_name`,`cate_id`,image,sales,`ficti`,`price`,`stock`,(ficti+sales) AS `jia` FROM `eb_store_product` WHERE  `is_del` = 0  AND `is_show` = 1  AND `mer_id` = 0 ORDER BY `jia` DESC,`sort` DESC,`add_time` DESC LIMIT 0,20
 
