@@ -145,7 +145,9 @@
    </div>
 </form>
   
-<table id="demo" lay-filter="test"></table>
+<table id="demo" lay-filter="test">
+</table>
+
 </div>
   
 <script src="{__PLUG_PATH}layui/layui.js"></script>
@@ -162,17 +164,18 @@ var xiaoben;
             elem: '#demo',
             url: './ranking_store_browse_data' //数据接口
             ,
-            page: {theme:'#393D49'} //开启分页,并设置分页颜色
+            page: {theme:'#393D49'} //开启分页
             ,
             cols: [[
                     { type: 'numbers', title: '编号', sort: true },
                     { field: 'id', title: '商品id', sort: true },
-                    { field: 'image', title: '商品图片', templet: '<p><img class="avatar " style="cursor: pointer; margin: 0px -10px;  width: calc(100% + 20px);  height: calc(100% + 20px);" data-image="{{d.image}}" src="{{d.image}}" alt="{{d.store_name}}"></p>' },
+                    { field: 'image', title: '商品图片', templet: '<p><img class="avatar" onclick="xiaoben.imgClick(this)" lay-event="open_image" style="cursor: pointer; margin: 0px -10px;  width: calc(100% + 20px);  height: calc(100% + 20px);" data-image="{{d.image}}" src="{{d.image}}" alt="{{d.store_name}}"></p>' },
                     { field: 'store_name', title: '商品名字' },
                     { field: 'browerCount', title: '商品浏览量', sort: true }
                 ]],
             id: 'testReload'
         });
+      
         form.on('select(test)', function (data) {
             GB_cateId = data.value;
             table.reload('testReload', {
@@ -198,6 +201,15 @@ var xiaoben;
             }, 'data');
             return false; //阻止下一步操作
         });
+      xiaoben.imgClick = function(e){
+        layer.open({
+          type: 1, 
+          content: '<img src='+e.attributes.src.nodeValue+' width=500 height=500 />',
+          maxWidth: 750,
+          maxHeight: 750
+        });
+      };
+      
     });
 })(xiaoben || (xiaoben = {}));
 
