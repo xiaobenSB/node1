@@ -103,6 +103,9 @@
     height: 60px !important;
     line-height: 60px !important;
   }
+  .layui-table-page{
+    background-color:#fff;
+   }
 </style>
 <body>
  
@@ -159,7 +162,7 @@ var xiaoben;
             elem: '#demo',
             url: './ranking_store_browse_data' //数据接口
             ,
-            page: true //开启分页
+            page: {theme:'#393D49'} //开启分页,并设置分页颜色
             ,
             cols: [[
                     { type: 'numbers', title: '编号', sort: true },
