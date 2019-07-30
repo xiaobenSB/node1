@@ -1,0 +1,5 @@
+2019/7/30 10:11
+
+     当我们使用buffer的toString时,如：var utf8Buf = Buffer.from('hello world','utf8');var base64 = utf8Buf.toString('base64');
+注意: 1.Buffer.from只是把第一个参数变成第二参数的编码的（16）进制。 2. toString可以把对应的Buffer处理成第一个参数的编码。 
+      3. Buffer.from 和 Buffer.toString 是两种不同的处理方式。
