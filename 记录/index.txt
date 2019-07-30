@@ -3,3 +3,6 @@
      当我们使用buffer的toString时,如：var utf8Buf = Buffer.from('hello world','utf8');var base64 = utf8Buf.toString('base64');
 注意: 1.Buffer.from只是把第一个参数变成第二参数的编码的（16）进制。 2. toString可以把对应的Buffer处理成第一个参数的编码。 
       3. Buffer.from 和 Buffer.toString 是两种不同的处理方式。
+toString的过程可能是：当我们把一个utf8的buffer使用toString转成base64时，toString的方法里可能是往utf8的buffer加或减点东西,然后就变成base64,当我们
+再把该base64转成Buffer时,使用toString转成utf8时,就会减掉或加点东西。因为规则可能是： utf8 -> base64 （加或减） base64 -> utf8 (如果utf8->base64
+为加，这里就为减，为减，这里就为加)，两个不同的编码使用buffer.toString互转时，要么就加，要么就减，因为这是buffer.toString处理的规则
