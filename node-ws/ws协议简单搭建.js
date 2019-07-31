@@ -324,7 +324,7 @@ console.log(byte1,FIN,opcode)
         encodeMessage(
           count > 0 ? OPCODES.CONTINUE : opcode,
           framePayload,
-          false
+          false         // 这里传第三个参数来替换默认true值， 也就是要分片  (false ? 0x80 : 0x00) | opcode
         )
       ); //编码后直接通过socket发送
       count++;
@@ -332,7 +332,7 @@ console.log(byte1,FIN,opcode)
     }
 console.log(222222222222222222);
     this.socket.write(
-      encodeMessage(count > 0 ? OPCODES.CONTINUE : opcode, payload)
+      encodeMessage(count > 0 ? OPCODES.CONTINUE : opcode, payload)  //这里不传第三个参数时，默认为true,也是 不分片了 或 分片结束 (true ? 0x80 : 0x00) | opcode
     ); //编码后直接通过socket发送
 
 	
