@@ -1,0 +1,143 @@
+var mysql = require("mysql");
+var async = require("async");
+var fs = require('fs');
+
+/*var pool = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "123456",
+    database: "test",
+    connectionLimit: 10,
+    port: "3306",
+    waitForConnections: false
+});*/
+
+
+/*
+
+var connection = mysql.createConnection({
+  host     : '119.23.66.20',
+  user     : 'yuancheng',
+  password : 'tuolve123456FOD;',
+  database : 'decoration-quotation',
+  multipleStatements: true,
+});
+ 
+connection.connect();
+
+var addSql = '';
+
+for(var i = 0; i < 100; i++){
+	
+	addSql += 'DELETE FROM xiaoben WHERE name = "xiaoben'+i+'" ;';
+}
+ 
+connection.query(addSql, function (error, results, fields) {
+  if (error) throw error;
+  console.log('The solution is: ', results[0].solution);
+});
+
+connection.end();
+
+*/
+
+
+var pool = mysql.createPool({
+    host: '119.23.66.20',
+    user: 'yuancheng',
+    password: 'tuolve123456FOD;',
+    database: 'decoration-quotation',
+	multipleStatements: true,
+	connectionLimit:2,
+	queueLimit: 2,
+	waitForConnections: false
+});
+
+
+//  事务提交状态下并配合async同步方法时，使用多条语句（1000语句以上）比单条查询（好）快太多了
+//  因为如果有一万或十万条语句，都是执行查询操作，那么你不可以push十万个方法吧，正因为他们都是查询操作，所以我们只要改变查询的值就好了
+//  第一种可能的数据库操作: 数据库校验 -> (成功才操作，不然执行下一步)操作 -> 返回校验信息
+//  第二种可能的数据库操作: 数据库校验 -> 返回校验信息(成功的才执行下一步操作) -> 操作
+
+   pool.getConnection(function (err, conn) {
+        if (err) {
+           console.log(err);
+        } else {
+			
+			var addSql = '';
+			var funcAry = [];
+			var b = 0;
+			var c = 0;
+			
+		   conn.beginTransaction(function (err) {  //  开启事务模式，该方法有延迟，这个方法好像是先让mysql测试查询语句看符合不，然后提交时再让mysql把数据写入，也就是阻止数据符合时自动写入
+												   //  如果不使用这个方法，我们使用一条mysql语句时，经过数据库校验->操作（或1.返回校验信息）->返回校验信息（或2.操作），
+												   //  所以当我们有很多条mysql数据时，不让它一条一条的写入，让他先校验最后再全部写入
+												   //  注意：好像如果不设这个方法，那你使用多条语句查询时，（好像）也是一条接着一条写入的。
+				  async function a(){
+				
+						for(var i = 0; i < 10; i++){
+							b+=10000;
+						
+							for(; c < b; c++){
+								addSql = addSql + 'INSERT INTO xiaoben(name,xiao,ben,why) VALUES("xiaoben'+c+'",234,1,1529);'
+							   };
+						    
+                            (function(addSqlStr,i){   //  使用闭包来保存
+								
+							   var temp = function(cb){
+								   
+								 conn.query(addSqlStr, null, function (err, results, fields) {   //  这里等同于一个事务
+								 
+									    //if(i == 9) { cb(1,'err') };   //  像这种第一个参数为1的话，就不会执行下一个方法了
+									    cb(null,err);   //  cb第一个参数为null,async才会执行下一个方法
+						         });	
+								   
+							   };
+                               funcAry.push(temp);							   
+								
+							})(addSql,i);							
+							
+
+							addSql = '';
+						
+						};
+						
+				        async.series(funcAry, function (err, result) {   //  这里的参数对应cb里的参数
+						    
+							if (err) {
+								 console.log('执行事务失败',err);
+								 conn.rollback(function (err) {    //  清除掉所有的事务
+									 console.log("transaction error: " + err);
+									 conn.release();
+									return callback(err, null);
+								 });
+							}else{
+								
+								conn.commit(function (err, info) {  //  提交所有的事务			
+									
+									console.log("transaction info: " + JSON.stringify(info));
+									if (err) {
+										console.log("执行提交所有事务失败，" + err);
+										conn.rollback(function (err) {  //）
+											console.log("transaction error: " + err);
+											conn.release();
+											return callback(err, null);
+										});
+									} else {
+										conn.release();   //  释放操作数据库连接
+										console.log('ok');
+									};
+						        }); //  提交结束  
+															
+							}; //  else结束
+							
+                        });	 //  async结束					
+				 
+				 };    //  a结束
+				a();
+			});  //  开启事务结束
+			  
+				  
+		}
+    });
+	
